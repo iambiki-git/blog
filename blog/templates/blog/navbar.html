@@ -1,0 +1,40 @@
+{% load static %}
+<nav class="p-2 bg-white-100">
+  <div class="flex items-center justify-between">
+    <a href="/">
+      <img
+        src="{% static './images/logo.png' %}"
+        alt="logo"
+        class="h-16 cursor-pointer"
+      />
+    </a>
+
+    {% comment %} for desktop {% endcomment %}
+    <ul class="gap-8 text-medium font-medium font-sans cursor-pointer hidden md:flex mr-6" id="desktop-menus">
+      <a href="/" class="hover:text-red-600 hover:border-b-2"><li>Home</li></a>
+      {% if user.is_authenticated %}
+        <a href="#" class="hover:text-red-600 hover:border-b-2"><li>Profile</li></a>
+        {% endif %}
+        {% comment %} <a href="#" class="hover:text-red-600 hover:border-b-2"><li>Dashboard</li></a> {% endcomment %}
+      {% if user.is_authenticated %}
+        <a href="{% url 'signout' %}" class="hover:text-red-600 hover:border-b-2"><li>Logout</li></a>
+      {% else %}
+        <a href="{% url 'signin' %}" class="hover:text-red-600 hover:border-b-2"><li>Login</li></a>
+      {% endif %}
+    </ul>
+    <i class='bx bx-menu text-3xl md:hidden cursor-pointer' id="menu-icon"></i>
+  </div> 
+
+  {% comment %} for mobile devices {% endcomment %}
+  <div id="mobile-menus" class="md:hidden hidden flex-col items-center bg-slate-100 p-2">
+    <ul class="ml-4 text-xl text-gray-800">
+      <a href="/" class="hover:text-red-600"><li class="py-2">Home</li></a>
+      {% if user.is_authenticated %}
+        <a href="#" class="hover:text-red-600"><li class="py-2">Dashboard</li></a>
+      {% endif %}
+      <a href="{% url 'signin' %}" class="hover:text-red-600"><li class="py-2">Login</li></a>
+      <a href="{% url 'signout' %}" class="hover:text-red-600"><li class="py-2">Logout</li></a>
+    </ul> 
+  </div>  
+
+</nav>
