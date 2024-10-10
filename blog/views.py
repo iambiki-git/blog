@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import CustomUser
+from .models import CustomUser, Post
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
@@ -63,3 +64,27 @@ def signout(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
     return redirect('signin')
+
+def profile(request):
+    post = Post.objects.filter(user=request.user).order_by('-created_at')
+    paginator = Paginator(post, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    content = {
+        'page_obj':page_obj,
+    }
+    return render(request, 'blog/profile.html', content)
+
+def createPost(request):
+    if request.method == "POST":
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+
+    new_post = Post.objects.create(
+        user=request.user,
+        title=title,
+        content=content
+    )
+    new_post.save()
+    return redirect('profile')
