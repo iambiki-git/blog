@@ -7,6 +7,9 @@ urlpatterns = [
     path('register/', views.register, name="register"),
     path('signout/', views.signout, name="signout"),
     path('profile/', views.profile, name="profile"),
-    path('createPost/', views.createPost, name="createPost"),
+    path('post/create/', views.createPost, name="createPost"),
+    path('posts/edit/<int:post_id>/', views.edit_post, name="editPost"),
+    path('posts/delete/<int:post_id>/', views.delete_post, name="delete_post"),
+    path('readmore/<int:post_id>/', views.readMore, name="readmore"),
 
 ]

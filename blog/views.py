@@ -1,13 +1,19 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from .models import CustomUser, Post
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
-    return render(request, 'blog/index.html')
+    all_posts = Post.objects.all().order_by('-created_at')[:6]
+
+    content = {
+        'all_posts':all_posts,
+    }
+    return render(request, 'blog/index.html', content)
 
 def signin(request):
     if request.method == "POST":
@@ -65,17 +71,20 @@ def signout(request):
     messages.success(request, "You have been logged out successfully.")
     return redirect('signin')
 
+@login_required
 def profile(request):
     post = Post.objects.filter(user=request.user).order_by('-created_at')
-    paginator = Paginator(post, 3)
+    paginator = Paginator(post, 2)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
 
     content = {
         'page_obj':page_obj,
     }
     return render(request, 'blog/profile.html', content)
 
+@login_required
 def createPost(request):
     if request.method == "POST":
         title = request.POST.get('title')
@@ -88,3 +97,24 @@ def createPost(request):
     )
     new_post.save()
     return redirect('profile')
+
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+    if request.method == "POST":
+        post.title = request.POST['title']
+        post.content = request.POST['content']
+        post.save()
+        # messages.success(request, 'Post updated successfully.')
+        return redirect('profile')
+    
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+    post.delete()
+    return redirect('profile')
+
+def readMore(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    content = {
+        'post':post,
+    }
+    return render(request, 'blog/readMore.html', content)

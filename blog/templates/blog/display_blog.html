@@ -1,22 +1,31 @@
 {% load static %}
 {% block DisplayBlog %}
-<div class="container mx-auto p-6 bg-slate-100">
+
+<div class="container mx-auto mt-28 mb-3 rounded-lg cursor-pointer p-6 bg-slate-100">
     <h1 class="text-4xl font-bold mb-6 text-center">Latest Blog Posts</h1>
   
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% if all_posts %}
+        {% for post in all_posts %}
       <!-- Blog Post Card -->
       <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <a href="{% url 'readmore' post.id %}">
         <img src="{% static 'images/post1.jpg' %}" alt="Post Image" class="w-full h-48 object-cover">
+      </a>
         <div class="p-6">
-          <h2 class="text-xl font-semibold mb-4">Blog Post Title</h2>
-          <p class="text-gray-700">A short summary or excerpt from the blog post...</p>
+          <h2 class="text-xl font-semibold mb-4">{{ post.title }}</h2>
+          <p class="text-gray-700">{{ post.content|truncatewords:6 }}</p>
           {% if user.is_authenticated %}
-            <a href="#" class="text-blue-500 hover:underline mt-4 block">Read More</a>
+            <a href="{% url 'readmore' post.id %}" class="text-blue-500 hover:underline mt-4 block">Read More</a>
             {% else %}
             <span class="text-gray-400 mt-4 block">Login to read more</span>
           {% endif %}
         </div>
       </div>
+      {% endfor %}
+      {% else %}
+      <p>No post available</p>
+      {% endif %}
 
   
       <!-- Repeat similar cards for additional blog posts -->

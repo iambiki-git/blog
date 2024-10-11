@@ -1,0 +1,46 @@
+<footer class="bg-gray-800 text-white py-8">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- About Us Section -->
+        <div class="space-y-4">
+            <h2 class="text-2xl font-bold">About Us</h2>
+            <p class="text-gray-400">
+                We are a dedicated team committed to providing the best content and services. Our goal is to offer valuable insights and build strong relationships with our customers.
+            </p>
+            <a href="#" class="text-blue-400 hover:underline">Learn More</a>
+        </div>
+
+        <!-- Contact Us Section -->
+        <div class="space-y-4">
+            <h2 class="text-2xl font-bold ">Contact Us</h2>
+            <p class="text-gray-400">Have questions? Reach out to us!</p>
+            <form action="/submit-contact" method="POST" class="space-y-4">
+                <div>
+                    <input type="text" name="name" placeholder="Your Name" class="w-full p-2 border border-gray-300 rounded" required>
+                </div>
+                <div>
+                    <input type="email" name="email" placeholder="Your Email" class="w-full p-2 border border-gray-300 rounded" required>
+                </div>
+                <div>
+                    <textarea name="message" placeholder="Your Message" class="w-full p-2 border border-gray-300 rounded" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Send Message</button>
+            </form>
+        </div>
+
+        <!-- Social Links Section -->
+        <div class="space-y-4">
+            <h2 class="text-2xl font-bold">Follow Us</h2>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-blue-500"><i class='bx bxl-facebook-square text-3xl'></i></a>
+                <a href="#" class="hover:text-blue-400"><i class='bx bxl-twitter text-3xl'></i></a>
+                <a href="#" class="hover:text-pink-600"><i class='bx bxl-instagram text-3xl'></i></a>
+                <a href="#" class="hover:text-blue-600"><i class='bx bxl-linkedin-square text-3xl'></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="text-center text-gray-500 mt-8">
+        <p>&copy; 2024 YourWebsite. All rights reserved.</p>
+    </div>
+</footer>
