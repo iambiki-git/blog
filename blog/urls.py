@@ -11,5 +11,8 @@ urlpatterns = [
     path('posts/edit/<int:post_id>/', views.edit_post, name="editPost"),
     path('posts/delete/<int:post_id>/', views.delete_post, name="delete_post"),
     path('readmore/<int:post_id>/', views.readMore, name="readmore"),
+    path('contactus/', views.contactus, name="contactus"),
+    path('approve_post/<int:post_id>/', views.approve_post, name="approve_post"),
+    path('notification/', views.notification, name="notification"),
 
 ]

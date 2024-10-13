@@ -1,0 +1,45 @@
+{% extends "./index.html" %}
+{% load static %}
+{% block title %}Notification{% endblock %}
+{% block DisplayBlog %}{% endblock %}
+{% block Notification %}
+<div class="container mx-auto p-6 mt-28">
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+        <h2 class="text-4xl font-bold text-gray-800">Notifications</h2>
+        <p class="text-gray-500 mt-2">Stay updated with recent activities</p>
+    </div>
+
+    <!-- Notification Column -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <!-- Notification for Post Like -->
+        <div class="flex items-center space-x-4 py-4 border-b">
+            <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                <i class="bx bxs-like text-2xl"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold">New Like</h3>
+                <p class="text-gray-500 text-sm"><strong>John Doe</strong> liked your post: "My Travel Adventure".</p>
+            </div>
+        </div>
+
+        <!-- Notification for Admin Post Deletion -->
+         {% if notifications %}
+         {% for notification in notifications %}
+        <div class="flex items-center space-x-4 py-4 border-b">
+            <div class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center">
+                <i class="bx bxs-trash text-2xl"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold">Post Deleted</h3>
+                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+
+
+{% endblock %}

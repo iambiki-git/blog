@@ -50,10 +50,11 @@
  <!-- User Posts -->
  <div class="col-span-1 lg:col-span-2 bg-white rounded-lg shadow-lg p-6">
     <div class="flex justify-between items-center mb-6">
+      {% if request.user.is_superuser %}
+      <h2 class="text-2xl font-bold text-gray-700">All Posts</h2>
+      {% else %}
       <h2 class="text-2xl font-bold text-gray-700">Your Posts</h2>
-      {% comment %} <a href="" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-        Add New Post
-      </a> {% endcomment %}
+      {% endif %}
       <button id="addPostBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add New Post</button>
 
     </div>
@@ -64,35 +65,56 @@
       <table class="table-auto w-full text-left">
         <thead>
           <tr class="bg-gray-200 text-gray-700">
+            {% if user.is_superuser %}
+            <th class="py-3 px-4">User</th>
+            {% endif %}
             <th class="py-3 px-4">Title</th>
             <th class="py-3 px-4">Content</th>
             <th class="py-3 px-4">Created_at</th>
             <th class="py-3 px-4">Actions</th>
+            {% if user.is_superuser %}
+            <th class="py-3 px-4">Approve</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
           {% for post in page_obj %}
           <tr class="border-t">
+            {% if user.is_superuser %}
+            <td class="py-4 px-4">{{ post.user }}</td>
+            {% endif %}
+            {% if not user.is_superuser and not post.is_approved %}
+            <td class="py-4 px-4">{{ post.title }}</td> 
+            <td class="py-4 px-4 text-justify text-yellow-500 font-bold">Pending Approval</td>
+            {% else %}
             <td class="py-4 px-4">{{ post.title }}</td>
-            <td class="py-4 px-4">{{ post.content }}</td>
+            <td class="py-4 px-4 text-justify">{{ post.content }}</td>
+            {% endif %}
             <td class="py-4 px-4">{{ post.created_at }}</td>
             <td class="py-4 px-4 flex space-x-2">
               <div class="flex items-center space-x-2">
-                {% comment %} <a href="" class="text-blue-500 hover:underline text-xl md:text-base lg:text-lg">
-                    <i class='bx bx-edit-alt'></i>
-                </a> {% endcomment %}
+                {% if not user.is_superuser %}
                 <a href="javascript:void(0);" 
-   class="text-blue-500 hover:underline text-xl md:text-base lg:text-lg editPostBtn"
-   data-post-id="{{ post.id }}" 
-   data-post-title="{{ post.title }}" 
-   data-post-content="{{ post.content }}">
-    <i class='bx bx-edit-alt'></i>
-</a>
-                <a href="{% url 'delete_post' post.id %}" class="text-red-500 hover:underline text-xl md:text-base lg:text-lg">
-                    <i class='bx bx-trash'></i>
+                  class="text-blue-500 hover:underline text-xl md:text-base lg:text-lg editPostBtn"
+                  data-post-id="{{ post.id }}" 
+                  data-post-title="{{ post.title }}" 
+                  data-post-content="{{ post.content }}">
+                    <i class='bx bx-edit-alt'></i>
+                </a>
+                {% endif %}
+                <a href="{% url 'delete_post' post.id %}" class="text-red-500 hover:underline text-xl md:text-base lg:text-lg items-center">
+                  <i class='bx bx-trash'></i>
                 </a>
             </div>
             </td>
+            {% if user.is_superuser %}
+            <td>
+              <form action="{% url 'approve_post' post.id %}" method="POST">  
+                {% csrf_token %}
+                <input type="checkbox" name="is_approve" {% if post.is_approved %}checked{% endif %} onchange="this.form.submit()">
+              </form>
+            </td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>

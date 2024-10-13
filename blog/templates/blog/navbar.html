@@ -6,15 +6,71 @@
     </a>
 
     {% comment %} for desktop {% endcomment %}
-    <ul class="flex space-x-6 text-gray-700 font-medium hidden md:flex" id="desktop-menus">
-      <li><a href="/" class="hover:text-red-600 transition duration-300">Home</a></li>
+    {% comment %} <ul class="flex space-x-6 text-gray-700 font-medium hidden md:flex" id="desktop-menus">
+      <li><a href="/" class="hover:text-red-600 transition duration-300"><i class='bx bxs-home text-xl' ></i></a></li>
       {% if user.is_authenticated %}
-        <li><a href="{% url 'profile' %}" class="hover:text-red-600 transition duration-300">Profile</a></li>
-        <li><a href="{% url 'signout' %}" class="hover:text-red-600 transition duration-300">Logout</a></li>
+        <li><a href="{% url 'profile' %}" class="hover:text-red-600 transition duration-300"><i class='bx bxs-user-circle text-xl'></i></a></li>
+        <li><a href="{% url 'notification' %}" class="hover:text-red-600 transition duration-300"><i class='bx bxs-bell-ring text-xl'></i></a></li>
+        <li><a href="{% url 'signout' %}" class="hover:text-red-600 transition duration-300"><i class='bx bxs-log-out text-xl' ></i></a></li>
       {% else %}
-        <li><a href="{% url 'signin' %}" class="hover:text-red-600 transition duration-300">Login</a></li>
+        <li><a href="{% url 'signin' %}" class="hover:text-red-600 transition duration-300"><i class='bx bxs-log-in text-xl' ></i></a></li>
+      {% endif %}
+    </ul> {% endcomment %}
+
+    <ul class="flex space-x-6 text-gray-700 font-medium hidden md:flex" id="desktop-menus">
+      <li class="relative group">
+        <a href="/" class="hover:text-red-600 transition duration-300">
+          <i class='bx bxs-home text-xl'></i>
+        </a>
+        <span class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Home</span>
+      </li>
+    
+      {% if user.is_authenticated %}
+      <li class="relative group">
+        <a href="{% url 'profile' %}" class="hover:text-red-600 transition duration-300">
+          <i class='bx bxs-user-circle text-xl'></i>
+        </a>
+        <span class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Profile</span>
+      </li>
+      
+      {% comment %} <li class="relative group">
+        <a href="{% url 'notification' %}" class="hover:text-red-600 transition duration-300">
+          <i class='bx bxs-bell-ring text-xl'></i>
+        </a>
+        <span class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Notifications</span>
+      </li> {% endcomment %}
+
+      <li class="relative group">
+        <a href="{% url 'notification' %}" class="hover:text-red-600 transition duration-300 relative">
+          <i class='bx bxs-bell-ring text-xl'></i>
+          {% if new_notifications_count > 0 %}
+            <span class="absolute -top-1 -right-3 bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+              {{ new_notifications_count }}
+            </span>
+          {% endif %}
+        </a>
+        <span class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            Notifications
+        </span>
+    </li>
+    
+    
+      <li class="relative group">
+        <a href="{% url 'signout' %}" class="hover:text-red-600 transition duration-300">
+          <i class='bx bxs-log-out text-xl'></i>
+        </a>
+        <span class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Logout</span>
+      </li>
+      {% else %}
+      <li class="relative group">
+        <a href="{% url 'signin' %}" class="hover:text-red-600 transition duration-300">
+          <i class='bx bxs-log-in text-xl'></i>
+        </a>
+        <span class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Login</span>
+      </li>
       {% endif %}
     </ul>
+    
 
     <button id="menu-icon" class="text-gray-700 md:hidden">
       <i class='bx bx-menu text-3xl'></i>
@@ -45,6 +101,12 @@
       <li>
         <a href="{% url 'profile' %}" class="flex items-center hover:bg-red-200 hover:text-red-600 py-2 rounded transition duration-300">
           <i class='bx bx-user mr-2'></i> Profile
+        </a>
+      </li>
+      <li>
+      <li>
+        <a href="{% url 'notification' %}" class="flex items-center hover:bg-red-200 hover:text-red-600 py-2 rounded transition duration-300">
+          <i class='bx bx-bell mr-2'></i>Notification
         </a>
       </li>
       <li>

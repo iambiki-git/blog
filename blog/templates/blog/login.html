@@ -3,13 +3,13 @@
 {% block title %}Login | Signin{% endblock title %}Login|Signin
 {% block DisplayBlog %} {% endblock %}
 {% block loginModule %}
-  <div class="flex justify-center items-center" style="min-height: calc(100vh - 15rem);">
+  <div class="flex justify-center items-center mt-32" style="min-height: calc(100vh - 15rem);">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-      {% if messages %}
+      {% comment %} {% if messages %}
         {% for message in messages %}
           <p class="{% if message.tags == 'error' %}text-red-500{% elif message.tags == 'success' %}text-green-500{% else %}text-gray-800{% endif %}">{{ message }}</p>
         {% endfor %}
-      {% endif %}
+      {% endif %} {% endcomment %}
       <h2 class="text-2xl font-bold mb-6 text-center">Login | <span class="font-bold text-green-500 text-2xl">SignIn</span></h2>
       <form action="{% url 'signin' %}" method="POST">
         {% csrf_token %}

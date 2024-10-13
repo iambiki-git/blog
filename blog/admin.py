@@ -1,15 +1,25 @@
 from django.contrib import admin
-from .models import CustomUser, Post
+from .models import CustomUser, Post, Contactus, Notification
 # Register your models here.
 
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'username', 'email', 'user')
-    search_fields = ('username', 'email')
+# class CustomUserAdmin(admin.ModelAdmin):
+#     list_display = ('first_name', 'last_name', 'username', 'email', 'user')
+#     search_fields = ('username', 'email')
 
-admin.site.register(CustomUser, CustomUserAdmin)
+# admin.site.register(CustomUser, CustomUserAdmin)
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'created_at', 'updated_at')
+    list_display = ('user', 'title', 'created_at', 'updated_at', 'is_approved')
 
 admin.site.register(Post, PostAdmin)
+
+class ContactusAdmin(admin.ModelAdmin):
+    list_display = ('user', 'name', 'email', 'message')
+
+admin.site.register(Contactus, ContactusAdmin)
+
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'created_at', 'is_read')   
+
+admin.site.register(Notification, NotificationAdmin)
