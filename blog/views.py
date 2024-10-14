@@ -145,6 +145,7 @@ def readMore(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     content = {
         'post':post,
+        'user':request.user,
     }
     return render(request, 'blog/readMore.html', content)
 
@@ -206,4 +207,28 @@ def updateProfile(request):
     
     return render(request, 'blog/profile.html')
 
+from django.http import JsonResponse
+from .models import Like
+def like_post(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        user = request.user
+        
+        # Check if the user has already liked the post
+        liked = Like.objects.filter(user=user, post=post).exists()
+        
+        if liked:
+            # If already liked, unlike the post
+            Like.objects.filter(user=user, post=post).delete()
+            liked = False
+        else:
+            # If not liked yet, like the post
+            Like.objects.create(user=user, post=post)
+            liked = True
+
+        # Return the updated like count and status
+        return JsonResponse({
+            'like_count': post.likes.count(),
+            'liked': liked,
+        })
        

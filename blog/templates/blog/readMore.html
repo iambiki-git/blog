@@ -2,7 +2,7 @@
 {% load static %}
 {% block DisplayBlog %}{% endblock %}
 {% block ReadMoreBlog %}
-{% comment %} <div class="mt-28"></div> {% endcomment %}
+
 <div class="mt-28 mb-10 px-4 md:px-8 lg:px-16">
     <div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg">
         <h1 class="text-5xl font-extrabold mb-4 text-gray-800 text-center">{{ post.title }}</h1>
@@ -13,32 +13,68 @@
             <h3 class="float-right font-bold">Author: {{ post.user }}</h3>
         </div>
 
-
+        <!-- Like button and like count -->
         <div class="flex items-center justify-between mt-8">
             <div class="flex items-center space-x-2">
-                <form action="" method="post" id="like-form">
+                <form id="like-form" action="{% url 'like_post' post.id %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="flex items-center bg-transparent focus:outline-none">
-                        <i class='bx bx-heart text-2xl md:text-lg'></i> <!-- Heart icon -->
+                    <button type="button" id="like-button" class="flex items-center bg-transparent focus:outline-none">
+                        <i id="like-icon" class="bx {% if user in post.likes.all %}bxs-heart{% else %}bx-heart{% endif %} text-2xl md:text-lg"></i>
                     </button>
                 </form>
             </div>
-            <p class="text-sm text-gray-500" id="like-count">{{ post.likes }} 505 Likes</p>
-        </div>
-        
-       
-        
-        
+            <p class="text-sm text-gray-500" id="like-count">{{ post.likes.count }} Likes</p>
+        </div> 
+
+
 
         <div class="mt-6">
             <a href="/" class="flex items-center bg-white border border-blue-200 text-blue-400 py-2 px-3 rounded-md transition duration-300 transform hover:bg-blue-200 hover:text-white shadow-md hover:shadow-lg">
-                <i class='bx bx-arrow-back mr-2 text-lg'></i>  <!-- Boxicons arrow icon -->
+                <i class='bx bx-arrow-back mr-2 text-lg'></i>
                 <span class="font-medium">Back to Blog</span>
             </a>
         </div>
-        
-        
-        
     </div>
 </div>
+
+
+<script>
+    document.getElementById('like-button').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent form submission
+
+        const form = document.getElementById('like-form');
+        const url = form.action;
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update the like count
+            document.getElementById('like-count').textContent = `${data.like_count} Likes`;
+
+            // Update the icon based on whether it's liked or not
+            const heartIcon = document.getElementById('like-icon');
+            if (data.liked) {
+                heartIcon.classList.remove('bx-heart');
+                heartIcon.classList.add('bxs-heart');
+                heartIcon.style.color = 'red'; // Highlight on like
+            } else {
+                heartIcon.classList.remove('bxs-heart');
+                heartIcon.classList.add('bx-heart');
+                heartIcon.style.color = 'black'; // Revert on unlike
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>  
+
+
+
+
 {% endblock %}

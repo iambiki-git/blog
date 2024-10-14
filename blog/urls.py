@@ -15,5 +15,5 @@ urlpatterns = [
     path('approve_post/<int:post_id>/', views.approve_post, name="approve_post"),
     path('notification/', views.notification, name="notification"),
     path('updateProfile/', views.updateProfile, name="updateProfile"),
-
+    path('like/<int:post_id>/', views.like_post, name='like_post'),
 ]
