@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
 def index(request):
     posts = Post.objects.filter(is_approved=True).order_by('-created_at')[:6]
     if request.user.is_authenticated:
@@ -31,7 +32,7 @@ def signin(request):
         if user is not None:
             login(request, user)
             # messages.success(request, "Login Successful! ")
-            return redirect('index')
+            return redirect('profile')
         else:
             messages.error(request, 'Invalid email or password..') 
 
@@ -86,7 +87,7 @@ def profile(request):
     if request.user.is_authenticated:
         new_notifications_count = Notification.objects.filter(user=request.user, is_read=False).count()
     else:
-        new_notifications_count = 0
+        new_notifications_count = 0 
     
     paginator = Paginator(post, 2)
     page_number = request.GET.get('page')
@@ -98,7 +99,7 @@ def profile(request):
     }
     return render(request, 'blog/profile.html', content)
 
-@login_required
+
 def createPost(request):
     if request.method == "POST":
         title = request.POST.get('title')
@@ -181,3 +182,28 @@ def notification(request):
         'notifications':notifications,
     }
     return render(request, 'blog/notification.html', context)
+
+def updateProfile(request):
+    if request.method == "POST":
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = request.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.username = username
+        
+        if password:
+            user.set_password(password)
+
+        user.save()
+        messages.success(request, 'Profile updated successfully')
+        return redirect('signin')
+    
+    return render(request, 'blog/profile.html')
+
+       

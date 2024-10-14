@@ -14,5 +14,6 @@ urlpatterns = [
     path('contactus/', views.contactus, name="contactus"),
     path('approve_post/<int:post_id>/', views.approve_post, name="approve_post"),
     path('notification/', views.notification, name="notification"),
+    path('updateProfile/', views.updateProfile, name="updateProfile"),
 
 ]
