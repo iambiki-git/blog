@@ -13,19 +13,22 @@
     <!-- Notification Column -->
     <div class="bg-white rounded-lg shadow-lg p-6">
         <!-- Notification for Post Like -->
+         {% if notifications %}
+         {% for notification in notifications %}
         <div class="flex items-center space-x-4 py-4 border-b">
+            {% if notification.notification_type == 'like' %}
             <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center">
                 <i class="bx bxs-like text-2xl"></i>
             </div>
             <div>
                 <h3 class="text-xl font-semibold">New Like</h3>
-                <p class="text-gray-500 text-sm"><strong>John Doe</strong> liked your post: "My Travel Adventure".</p>
+                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
             </div>
         </div>
+        {% elif notification.notification_type == 'delete' %}
 
         <!-- Notification for Admin Post Deletion -->
-         {% if notifications %}
-         {% for notification in notifications %}
+         
         <div class="flex items-center space-x-4 py-4 border-b">
             <div class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center">
                 <i class="bx bxs-trash text-2xl"></i>
@@ -34,8 +37,11 @@
                 <h3 class="text-xl font-semibold">Post Deleted</h3>
                 <p class="text-gray-500 text-sm">{{ notification.message }}</p>
             </div>
+            {% endif %}
         </div>
         {% endfor %}
+        {% else %}
+        <p class="text-gray-500 text-sm">No new notifications</p>
         {% endif %}
     </div>
 </div>

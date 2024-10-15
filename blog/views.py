@@ -133,6 +133,7 @@ def delete_post(request, post_id):
         if request.user.is_superuser:
             Notification.objects.create(
                 user = post.user,
+                notification_type = Notification.DELETE,
                 message = f"Your post '{post.title}' created on {post.created_at.strftime('%Y-%m-%d')} was deleted by admin."
             )     
     else:
@@ -143,9 +144,16 @@ def delete_post(request, post_id):
 
 def readMore(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+
+    if request.user.is_authenticated:
+        new_notifications_count = Notification.objects.filter(user=request.user, is_read=False).count()
+    else:
+        new_notifications_count = 0
+
     content = {
         'post':post,
         'user':request.user,
+        'new_notifications_count':new_notifications_count,
     }
     return render(request, 'blog/readMore.html', content)
 
@@ -225,6 +233,14 @@ def like_post(request, post_id):
             # If not liked yet, like the post
             Like.objects.create(user=user, post=post)
             liked = True
+
+            if post.user != user:
+                Notification.objects.create(
+                    user = post.user,
+                    post = post,
+                    notification_type = Notification.LIKE,
+                    message = f"{user.username} liked your post: '{post.title}'"
+                )
 
         # Return the updated like count and status
         return JsonResponse({
