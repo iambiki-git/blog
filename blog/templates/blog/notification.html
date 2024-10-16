@@ -3,7 +3,8 @@
 {% block title %}Notification{% endblock %}
 {% block DisplayBlog %}{% endblock %}
 {% block Notification %}
-<div class="container mx-auto p-6 mt-28">
+
+<div class="container mx-auto p-6 mt-24">
     <!-- Header Section -->
     <div class="text-center mb-8">
         <h2 class="text-4xl font-bold text-gray-800">Notifications</h2>
@@ -11,41 +12,73 @@
     </div>
 
     <!-- Notification Column -->
-    <div class="bg-white rounded-lg shadow-lg p-6">
-        <!-- Notification for Post Like -->
-         {% if notifications %}
-         {% for notification in notifications %}
-        <div class="flex items-center space-x-4 py-4 border-b">
-            {% if notification.notification_type == 'like' %}
-            <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                <i class="bx bxs-like text-2xl"></i>
-            </div>
-            <div>
-                <h3 class="text-xl font-semibold">New Like</h3>
-                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
-            </div>
-        </div>
-        {% elif notification.notification_type == 'delete' %}
+     
+    <div class="bg-white rounded-lg shadow-lg p-6 divide-y divide-gray-200">
+        <!-- Added divide-y to visually separate each notification -->
+        
+        {% if notifications %}
+            <div class="flex flex-col space-y-2">  <!-- Use space-y-2 for consistent spacing -->
+                {% for notification in notifications %}
+                    <div class="flex items-start space-x-4 py-2">  <!-- Reduce padding here -->
+                        {% if notification.notification_type == 'like' %}
+                            <!-- Notification for Post Like -->
+                            <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                                <i class="bx bxs-like text-xl md:text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg md:text-xl font-semibold leading-tight">New Like</h3>
+                                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Notification for Admin Post Deletion -->
-         
-        <div class="flex items-center space-x-4 py-4 border-b">
-            <div class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center">
-                <i class="bx bxs-trash text-2xl"></i>
+                    <div class="flex items-start space-x-4 py-2">  <!-- Notification for Admin Post Deletion -->
+                        {% elif notification.notification_type == 'delete' %}
+                            <div class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center">
+                                <i class="bx bxs-trash text-xl md:text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg md:text-xl font-semibold leading-tight">Post Deleted</h3>
+                                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="flex items-start space-x-4 py-2">  <!-- Notification for Admin Post Deletion -->
+                        {% elif notification.notification_type == 'approved' %}
+                            <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center">
+                                <i class="bx bxs-check-circle text-xl md:text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg md:text-xl font-semibold leading-tight">Post Approved</h3>
+                                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
+                            </div>
+                        </div>
+                    </div> 
+
+
+                    <div class="flex items-start space-x-4 py-2">  <!-- Notification for Pending Post (Admin only) -->
+                        {% elif notification.notification_type == 'pending' and user.is_superuser %}
+                            <div class="min-w-12 min-h-12 bg-yellow-500 text-white rounded-full flex items-center justify-center">
+                                <i class="bx bxs-hourglass text-xl md:text-2xl"></i>
+                            </div>
+                            <a href="{% url 'profile' %}">
+                            <div class="flex-1">
+                                <h3 class="text-lg md:text-xl font-semibold leading-tight">Pending Post</h3>
+                                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
+                            </div>
+                            </a>
+                        {% endif %}
+                    </div>
+
+
+                {% endfor %}
             </div>
-            <div>
-                <h3 class="text-xl font-semibold">Post Deleted</h3>
-                <p class="text-gray-500 text-sm">{{ notification.message }}</p>
-            </div>
-            {% endif %}
-        </div>
-        {% endfor %}
         {% else %}
-        <p class="text-gray-500 text-sm">No new notifications</p>
+            <p class="text-gray-500 text-sm">No new notifications</p>
         {% endif %}
     </div>
 </div>
 
+{% endblock %} 
 
-
-{% endblock %}

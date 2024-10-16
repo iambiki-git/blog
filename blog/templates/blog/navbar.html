@@ -25,17 +25,21 @@
         <a href="{% url 'notification' %}" class="hover:text-red-600 transition duration-300 relative">
           <i class='bx bxs-bell-ring text-xl'></i>
           {% if new_notifications_count > 0 %}
-            <span class="absolute -top-1 -right-3 bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+          <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+            {% if new_notifications_count >= 2 %}
+              2+
+            {% else %}
               {{ new_notifications_count }}
-            </span>
-          {% endif %}
+            {% endif %}
+          </span>
+      {% endif %}
         </a>
         <span class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Notifications
         </span>
-    </li>
-    
-    
+    </li> 
+
+
       <li class="relative group">
         <a href="{% url 'signout' %}" class="hover:text-red-600 transition duration-300">
           <i class='bx bxs-log-out text-xl'></i>
@@ -55,6 +59,15 @@
 
     <button id="menu-icon" class="text-gray-700 md:hidden">
       <i class='bx bx-menu text-3xl'></i>
+      {% if new_notifications_count > 0 %}
+          <span class="absolute top-7 right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+            {% if new_notifications_count >= 2 %}
+              2+
+            {% else %}
+              {{ new_notifications_count }}
+            {% endif %}
+          </span>
+      {% endif %} 
     </button>
   </div>
 
@@ -74,17 +87,22 @@
         </a>
       </li>
       <li>
-      <li>
+
+        <li>
         <a href="{% url 'notification' %}" class="flex items-center hover:bg-red-200 hover:text-red-600 py-2 rounded transition duration-300">
           <i class='bx bx-bell mr-2'></i>Notification
           {% if new_notifications_count > 0 %}
-            <!-- Notification count badge -->
-            <span class="absolute top-30 right-50 transform translate-x-1/2 -translate-y-1/2 bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+          <span style="position:absolute; top:12.2rem; right:22.5rem;" class="bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+            {% if new_notifications_count >= 2 %}
+              2+
+            {% else %}
               {{ new_notifications_count }}
-            </span>
-          {% endif %}
+            {% endif %}
+          </span>
+      {% endif %}
         </a>
       </li>
+
       <li>
         <a href="{% url 'signout' %}" class="flex items-center hover:bg-red-200 hover:text-red-600 py-2 rounded transition duration-300">
           <i class='bx bx-log-out mr-2'></i> Logout

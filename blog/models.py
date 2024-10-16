@@ -36,9 +36,13 @@ class Contactus(models.Model):
 class Notification(models.Model):
     LIKE = 'like'
     DELETE = 'delete'
+    PENDING = 'pending'
+    APPROVED = 'approved'
     NOTIFICATION_TYPES = [
         (LIKE, 'Like'),
         (DELETE, 'Delete'),
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

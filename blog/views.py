@@ -11,7 +11,17 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     posts = Post.objects.filter(is_approved=True).order_by('-created_at')[:6]
     if request.user.is_authenticated:
-        new_notifications_count = Notification.objects.filter(user=request.user, is_read=False).count()
+        if request.user.is_superuser:
+            new_notifications_count = Notification.objects.filter(
+                is_read=False,
+                notification_type = 'pending',  
+                ).count()
+        else:
+            new_notifications_count = Notification.objects.filter(
+                user=request.user, 
+                is_read=False,
+                ).exclude(notification_type='pending').count()
+
     else:
         new_notifications_count = 0
 
@@ -111,6 +121,14 @@ def createPost(request):
         content=content
     )
     new_post.save()
+
+
+    Notification.objects.create(
+        user = request.user,
+        message = f"{request.user.username} has submitted a new post titled '{title}' for approval.",
+        notification_type = 'pending'
+    )
+
     return redirect('profile')
 
 def edit_post(request, post_id):
@@ -131,11 +149,19 @@ def delete_post(request, post_id):
 
         #create notification if deleted by admin
         if request.user.is_superuser:
+             # Notify the user whose post was deleted
             Notification.objects.create(
                 user = post.user,
                 notification_type = Notification.DELETE,
                 message = f"Your post '{post.title}' created on {post.created_at.strftime('%Y-%m-%d')} was deleted by admin."
-            )     
+            ) 
+
+        # Notify the admin who deleted the post
+            Notification.objects.create(
+                user=request.user,  # This is the admin
+                notification_type=Notification.DELETE,
+                message=f"You have successfully deleted the post '{post.title}' created by {post.user.username}."
+            )    
     else:
         messages.error(request, 'You do not have permission to delete this post.')
 
@@ -176,16 +202,32 @@ def contactus(request):
 
 def approve_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    user = post.user
     if request.method == "POST":
         post.is_approved = not post.is_approved
         post.save()
+
+        if post.is_approved:
+            notification_message = f"Your post '{post.title}' has been approved."
+            Notification.objects.create(
+                user = user,
+                notification_type = 'approved',
+                message = notification_message,
+                is_read=False,
+            )
+            messages.success(request, 'Post approved successfully.')
+
         return redirect('profile')
     
 def notification(request):
     notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
     unread_notifications = Notification.objects.filter(user=request.user, is_read=False)
     unread_notifications.update(is_read=True)
-    
+
+    if request.user.is_superuser:
+        # Add pending notifications for admins
+        pending_notifications = Notification.objects.filter(notification_type='pending')
+        notifications = notifications | pending_notifications  # Combine the notifications
 
     context = {
         'notifications':notifications,
@@ -234,6 +276,7 @@ def like_post(request, post_id):
             Like.objects.create(user=user, post=post)
             liked = True
 
+            # Notify the user who owns the post about the like
             if post.user != user:
                 Notification.objects.create(
                     user = post.user,
@@ -241,6 +284,28 @@ def like_post(request, post_id):
                     notification_type = Notification.LIKE,
                     message = f"{user.username} liked your post: '{post.title}'"
                 )
+            
+            
+            
+            # Notify the user that they liked the post they just liked
+            if post.user == user:
+                # If the user liked their own post
+                Notification.objects.create(
+                    user=user,
+                    post=post,
+                    notification_type=Notification.LIKE,
+                    message=f"You liked your own post: '{post.title}'."
+                )
+            else:
+                # If the user liked someone else's post
+                Notification.objects.create(
+                    user=user,
+                    post=post,
+                    notification_type=Notification.LIKE,
+                    message=f"You liked the post '{post.title}' by {post.user.username}."
+                )
+
+           
 
         # Return the updated like count and status
         return JsonResponse({

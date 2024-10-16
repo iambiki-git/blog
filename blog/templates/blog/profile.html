@@ -89,13 +89,14 @@
           {% for post in page_obj %}
           <tr class="border-t">
             {% if user.is_superuser %}
-            <td class="py-4 px-4">{{ post.user }}</td>
+            <td class="py-4 px-4"><a href="{% url 'readmore' post.id %}">{{ post.user }}</a></td>
             {% endif %}
             {% if not user.is_superuser and not post.is_approved %}
-            <td class="py-4 px-4">{{ post.title }}</td> 
+            <td class="py-4 px-4">{{ post.title }}</td>
             <td class="py-4 px-4 text-justify text-yellow-500 font-bold">Pending Approval</td>
             {% else %}
-            <td class="py-4 px-4">{{ post.title }}</td>
+            
+            <td class="py-4 px-4"><a href="{% url 'readmore' post.id %}">{{ post.title }}</a></td>
             <td class="py-4 px-4 text-justify">{{ post.content }}</td>
             {% endif %}
             <td class="py-4 px-4">{{ post.created_at }}</td>
