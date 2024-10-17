@@ -113,11 +113,25 @@ def profile(request):
 def createPost(request):
     if request.method == "POST":
         title = request.POST.get('title')
+        image = request.FILES.get('image')
         content = request.POST.get('content')
 
+
+   
+         
+    # #make the first word bold
+    # words = content.split()
+    # if words:
+    #     bold_first_word = f'<h3>{words[0]}</h3>'
+    #     rest_of_content = ' '.join(words[1:])
+    #     formatted_content = f'{bold_first_word} {rest_of_content}'
+    
+
+    #create a new post
     new_post = Post.objects.create(
         user=request.user,
         title=title,
+        image = image,
         content=content
     )
     new_post.save()
@@ -313,3 +327,15 @@ def like_post(request, post_id):
             'liked': liked,
         })
        
+
+def search(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        # Filter posts where the title contains the query (case-insensitive)
+        posts = Post.objects.filter(title__icontains=query)
+        results = [{'title': post.title} for post in posts]
+    else:
+        results = []  # Empty query results in no results
+
+    return JsonResponse({'results': results})

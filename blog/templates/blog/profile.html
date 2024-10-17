@@ -164,14 +164,18 @@
 
 
   <!-- Modal (Popup) -->
-<div id="postModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+<div id="postModal" class="fixed z-50 inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
   <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
     <h2 id="modalTitle" class="text-xl font-bold mb-4">Create New Post</h2>
-    <form id="postForm" action="" method="POST">
+    <form id="postForm" action="" method="POST" enctype="multipart/form-data">
       {% csrf_token %}  
       <div class="mb-4">
         <label class="block text-gray-700">Title</label>
         <input type="text" id="postTitle" name="title" class="w-full p-2 border border-gray-300 rounded" required />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">Image</label>
+        <input type="file" id="postImage" name="image" class="w-full p-2 border border-gray-300 rounded" accept="image/jpeg, image/png, image/webp" required />
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Content</label>

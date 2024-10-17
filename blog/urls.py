@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -16,4 +18,5 @@ urlpatterns = [
     path('notification/', views.notification, name="notification"),
     path('updateProfile/', views.updateProfile, name="updateProfile"),
     path('like/<int:post_id>/', views.like_post, name='like_post'),
-]
+    path('search/', views.search, name='search'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

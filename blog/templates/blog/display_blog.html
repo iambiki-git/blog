@@ -11,7 +11,7 @@
       <div class="bg-white shadow-lg rounded-lg overflow-hidden transition duration-300 hover:scale-95 hover:opacity-50">
         {% if user.is_authenticated %}
         <a href="{% url 'readmore' post.id %}">
-          <img src="{% static 'images/post1.jpg' %}" alt="Post Image" class="w-full h-48 object-cover">
+          <img src="{{ post.image.url }}" alt="Post Image" class="w-full h-48 object-cover">
         </a> 
       {% else %} 
         

@@ -9,7 +9,7 @@
         <img src="{{ post.image.url }}" alt="Post Image" class="w-full h-72 object-cover rounded-lg shadow-md mb-4">
 
         <div class="text-gray-700 mb-6">
-            <p class="text-lg text-justify leading-relaxed">{{ post.content }}</p>
+            <p class="text-lg text-justify leading-relaxed">{{ post.content|linebreaksbr }}</p>
             <h3 class="float-right font-bold">Author: {{ post.user }}</h3>
         </div>
 

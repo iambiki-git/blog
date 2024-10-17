@@ -1,9 +1,26 @@
 {% load static %}
 <nav class="bg-white shadow-md p-4 fixed top-0 left-0 w-full z-50">
   <div class="container mx-auto flex items-center justify-between">
+   <div>
     <a href="/">
-      <img src="{% static './images/logo.png' %}" alt="logo" class="h-16 cursor-pointer" />
+      <img src="{% static './images/logo.png' %}" style="object-fit:cover;" alt="logo" class="h-16 cursor-pointer" />
     </a>
+   </div>
+
+   <div class="search-container w-full ml-4 mr-4 max-w-lg mx-auto relative">
+    <i class='bx bx-search text-gray-600 p-2 md:hidden text-2xl mt-1 font-bold float-right' id="searchIcon"></i>
+    <input 
+      type="text" 
+      id="searchInput" 
+      placeholder="Search posts..." 
+      onkeyup="searchPosts()" 
+      class="search-input w-full hidden md:block p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mt-1 focus:border-transparent"
+    >
+    <div id="searchResults" class="search-results mt-2 bg-white border border-gray-300 rounded-lg shadow-md max-h-60 overflow-y-auto hidden absolute z-10 w-full">
+      <!-- Results will show here -->
+    </div>
+  </div>
+  
 
     <ul class="flex space-x-6 text-gray-700 font-medium hidden md:flex" id="desktop-menus">
       <li class="relative group">
@@ -26,8 +43,8 @@
           <i class='bx bxs-bell-ring text-xl'></i>
           {% if new_notifications_count > 0 %}
           <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-            {% if new_notifications_count >= 2 %}
-              2+
+            {% if new_notifications_count >= 9 %}
+              9+
             {% else %}
               {{ new_notifications_count }}
             {% endif %}
@@ -61,8 +78,8 @@
       <i class='bx bx-menu text-3xl'></i>
       {% if new_notifications_count > 0 %}
           <span class="absolute top-7 right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-            {% if new_notifications_count >= 2 %}
-              2+
+            {% if new_notifications_count >= 9 %}
+              9+
             {% else %}
               {{ new_notifications_count }}
             {% endif %}
@@ -93,8 +110,8 @@
           <i class='bx bx-bell mr-2'></i>Notification
           {% if new_notifications_count > 0 %}
           <span style="position:absolute; top:12.2rem; right:22.5rem;" class="bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-            {% if new_notifications_count >= 2 %}
-              2+
+            {% if new_notifications_count >= 9 %}
+              9+
             {% else %}
               {{ new_notifications_count }}
             {% endif %}
@@ -117,9 +134,8 @@
     {% endif %}
   </ul>
 </div>
-
-
 </nav>
+
 
 <script>
   const menuIcon = document.getElementById("menu-icon");
@@ -128,4 +144,13 @@
   menuIcon.addEventListener("click", () => {
     mobileMenus.classList.toggle("hidden");
   });
+
+  const searchIcon = document.getElementById('searchIcon');
+  const searchInput = document.getElementById('searchInput');
+  searchIcon.addEventListener('click', function(){
+    searchInput.style.display = "block";
+    searchIcon.style.display = "none";
+  })
+
+  
 </script>
