@@ -14,9 +14,9 @@
           <img src="{{ post.image.url }}" alt="Post Image" class="w-full h-48 object-cover">
         </a> 
       {% else %} 
-        
-        <img src="{% static 'images/post1.jpg' %}" alt="Post Image" class="w-full h-48 object-cover">
-      
+        <a href="{% url 'signin' %}">
+          <img src="{{ post.image.url }}" alt="Post Image" class="w-full h-48 object-cover">
+        </a>
       {% endif %}
         <div class="p-6">
           <h2 class="text-xl font-semibold mb-4">{{ post.title }}</h2>

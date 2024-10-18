@@ -197,22 +197,47 @@ def readMore(request, post_id):
     }
     return render(request, 'blog/readMore.html', content)
 
-from .models import Contactus
+# from .models import Contactus
+# def contactus(request):
+#     if request.method == "POST":
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         message = request.POST.get('message')
+
+#         user_message = Contactus.objects.create(
+#             user = request.user,
+#             name = name,
+#             email = email, 
+#             message = message
+#         )
+#         user_message.save()
+#         messages.success(request, 'Thank you for contacting us! We have received your message and will get back to you shortly.')
+#         return redirect('index')
+
+from django.core.mail import send_mail
+from django.conf import settings
 def contactus(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message')
 
-        user_message = Contactus.objects.create(
-            user = request.user,
-            name = name,
-            email = email, 
-            message = message
-        )
-        user_message.save()
-        messages.success(request, 'Thank you for contacting us! We have received your message and will get back to you shortly.')
-        return redirect('index')
+        # Compose the email
+        subject = f"New blog related Message from {name}"
+        email_message = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+        recipient_list = [settings.EMAIL_HOST_USER]  # Admin email
+
+        # Send the email
+        try:
+            send_mail(subject, email_message, settings.DEFAULT_FROM_EMAIL, recipient_list)
+            messages.success(request, 'Your message has been sent successfully!')
+        except Exception as e:
+            print(e)
+            messages.error(request, 'Failed to send your message. Please try again later.')
+
+        return redirect('index')  # Replace with the appropriate URL
+
+  
 
 def approve_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -327,7 +352,7 @@ def like_post(request, post_id):
             'liked': liked,
         })
        
-
+@login_required
 def search(request):
     query = request.GET.get('q', '')
 

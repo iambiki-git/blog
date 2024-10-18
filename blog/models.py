@@ -25,14 +25,7 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-class Contactus(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    email = models.CharField(max_length=255)
-    message = models.TextField()
 
-    def __str__(self):
-        return self.name
 
 class Notification(models.Model):
     LIKE = 'like'

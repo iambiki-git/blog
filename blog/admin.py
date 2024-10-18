@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Post, Contactus, Notification, Like
+from .models import CustomUser, Post, Notification, Like
 # Register your models here.
 
 # class CustomUserAdmin(admin.ModelAdmin):
@@ -14,10 +14,7 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 
-class ContactusAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name', 'email', 'message')
 
-admin.site.register(Contactus, ContactusAdmin)
 
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('user', 'message', 'created_at', 'is_read')   
