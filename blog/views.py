@@ -334,7 +334,7 @@ def search(request):
     if query:
         # Filter posts where the title contains the query (case-insensitive)
         posts = Post.objects.filter(title__icontains=query)
-        results = [{'title': post.title} for post in posts]
+        results = [{'id':post.id, 'title': post.title} for post in posts]
     else:
         results = []  # Empty query results in no results
 
